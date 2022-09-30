@@ -7,6 +7,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardPostController;
+use App\Http\Controllers\TagsController;
+use App\Models\Tags;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,8 @@ Route::get('/categories', function(){
         'categories' => Category::all()
     ]);
 })->middleware('auth');
+
+Route::get('/tags', [TagsController::class, 'index'])->middleware('auth');
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
