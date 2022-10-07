@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\CommentController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardPostController;
+use App\Http\Controllers\EbookController;
 use App\Http\Controllers\TagsController;
 use App\Models\Tags;
 
@@ -46,6 +48,7 @@ Route::get('/categories', function(){
         'categories' => Category::all()
     ]);
 })->middleware('auth');
+Route::get('/ebooks', [PostController::class, 'ebook'])->middleware('auth');
 
 Route::get('/tags', [TagsController::class, 'index'])->middleware('auth');
 
@@ -63,7 +66,12 @@ function() {
 
 Route::get('/dashboard/posts/cekSlug', [DashboardPostController::class, 'cekSlug'])->middleware('auth');
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
+Route::resource('/dashboard/ebook', EbookController::class)->except('show')->middleware('auth');
 Route::resource('/dashboard/categories', AdminCategoryController::class)->middleware('admin');
+
+Route::post('/comment/{id}', [CommentController::class, 'store']);
+Route::get('/comment/{id}', [CommentController::class, 'destroy']);
+Route::get('/downloadEbook/{id}', [PostController::class, 'download']);
 // Route::get('/categories/{category:slug}', function(Category $category) {
 //     return view('posts', [
 //         'title' => "Post By Category : $category->name",

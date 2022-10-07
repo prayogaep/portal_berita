@@ -86,6 +86,10 @@
                         <a href="/tags"
                             class="block py-2 pr-4 pl-3  {{ Request::is('tags*') ? 'md:text-blue-700'  : 'text-gray-700'}} rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Tags</a>
                     </li>
+                    <li>
+                        <a href="/ebooks"
+                            class="block py-2 pr-4 pl-3  {{ Request::is('ebooks*') ? 'md:text-blue-700'  : 'text-gray-700'}} rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">E-book</a>
+                    </li>
                     @auth
                         <button id="dropdownSmallButton" data-dropdown-toggle="dropdownSmall"
                             class="inline-flex items-center py-2 px-3 mr-3 mb-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg md:mb-0 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

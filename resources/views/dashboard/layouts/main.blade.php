@@ -26,6 +26,7 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
 
     @include('dashboard.layouts.header')
 

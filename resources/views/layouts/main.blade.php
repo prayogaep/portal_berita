@@ -20,7 +20,7 @@
 </head>
 
 <body>
-
+    @include('sweetalert::alert')
     @include('partials.navbarTailwind')
 
     <div class="container mt-4">

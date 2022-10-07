@@ -32,28 +32,81 @@
     <div class="container px-8 mx-auto mb-40">
         <div class="border rounded-lg shadow-lg p-10">
             <h1 class="text-2xl font-semibold mb-3">{{ $post->title }}</h1>
-                <p> By. <a href="/posts?author={{ $post->author->username }}"
-                        class="text-decoration-none">{{ $post->author->name }}</a> in <a
-                        href="/categories/{{ $post->category->slug }}"
-                        class="text-decoration-none">{{ $post->category->name }}</a></p>
+            <p> By. <a href="/posts?author={{ $post->author->username }}"
+                    class="text-decoration-none">{{ $post->author->name }}</a> in <a
+                    href="/categories/{{ $post->category->slug }}"
+                    class="text-decoration-none">{{ $post->category->name }}</a></p>
 
-                        @if ($post->image)
-                        <div style="max-height: 350px; overflow:hidden;">
-                        <img src="{{ asset('storage/' . $post->image) }}"
-                        alt="{{ $post->category->name }}" class="img-fluid">
-                          </div>
-                        @else
-                        <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}"
-                        alt="{{ $post->category->name }}" class="img-fluid">
+            @if ($post->image)
+                <div style="max-height: 350px; overflow:hidden;">
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->category->name }}" class="img-fluid">
+                </div>
+            @else
+                <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}"
+                    alt="{{ $post->category->name }}" class="img-fluid">
+            @endif
+
+            <article class="my-3 fs-5">
+                {!! $post->body !!}
+            </article>
+
+
+            <div class="my-10"></div>
+            <a href="/posts"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Back
+                to posts</a>
+            <div class="my-10"></div>
+            <hr class="mb-10">
+            <u><h1 class="mb-5">Comments</h1></u>
+            @forelse ($post->comments as $c)
+            <article>
+                <div class="flex items-center mb-4 space-x-4">
+                    <img class="w-10 h-10 rounded-full" src="https://ui-avatars.com/api/?background=random&name={{ $c->user->username }}" alt="">
+                    <div class="space-y-1 font-medium dark:text-white">
+                        <p>{{ $c->user->username }} </p>
+                    </div>
+                </div>
+
+                <footer class="mb-5 text-sm text-gray-500 dark:text-gray-400">
+                    <p>Sent {{ $c->created_at->diffForHumans() }}</p>
+                </footer>
+                <p class="mb-3 font-light text-gray-500 dark:text-gray-400">{{ $c->comment }}</p>
+                    <div class="flex items-center mt-3 space-x-3 divide-x divide-gray-200 dark:divide-gray-600 mb-5">
+                        @if ($c->user_id == Auth::user()->id)
+                        <a href="/comment/{{ base64_encode($c->id) }}" class="text-white bg-red-600 border border-gray-300 focus:outline-none hover:bg-red-800 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-xs px-2 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" onclick="return confirm('are you sure?')">Delete</a>
                         @endif
+                    </div>
+            </article>
+            <hr class="mb-10">
+            @empty
+            <h1 class="text-center text-2xl mb-5 text-gray-400">No Comment Found</h1>
+            <hr class="mb-10">
+            @endforelse
 
-                <article class="my-3 fs-5">
-                    {!! $post->body !!}
-                </article>
+            <form action="/comment/{{ $post->id }}" method="post">
+                @csrf
+                <input type="hidden" name="slug" value="{{ $post->slug }}">
+                <div class="mb-4 w-full bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+                    <div class="py-2 px-4 bg-white rounded-t-lg dark:bg-gray-800">
+                        <label for="comment" class="sr-only">Your comment</label>
+                        <textarea id="comment" rows="4"
+                            class="px-0 w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                            placeholder="Write a comment..." required="" name="comment"></textarea>
+                    </div>
+                    <div class="flex justify-end items-center py-2 px-3 border-t dark:border-gray-600">
+                        <button type="submit"
+                            class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                            Post comment
+                        </button>
+
+                    </div>
+                </div>
+            </form>
 
 
 
-                <a href="/posts" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 my-3">Back to posts</a>
+
+
         </div>
     </div>
 
@@ -71,12 +124,14 @@
                     </a>
                     <div class="grid grid-cols-4 gap-4">
                         @foreach ($post->tags as $t)
-                        <div class="rounded bg-[#6C757D]">
+                            <div class="rounded bg-[#6C757D]">
 
-                            <a href="#" class="bg-[#6C757D] block rounded-sm text-white text-center text-xs font-semibold dark:bg-gray-700 dark:text-gray-300">{{  $t->tag->name }}</a href="#">
-                        </div>
+                                <a href="#"
+                                    class="bg-[#6C757D] block rounded-sm text-white text-center text-xs font-semibold dark:bg-gray-700 dark:text-gray-300">{{ $t->tag->name }}</a
+                                    href="#">
+                            </div>
                         @endforeach
-                      </div>
+                    </div>
                     {{-- <span
                         class="bg-[#DC3545] text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">Red</span>
                     <span
@@ -146,8 +201,4 @@
 
 
     </div>
-
-
-
-
 @endsection
