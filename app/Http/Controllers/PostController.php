@@ -31,7 +31,7 @@ class PostController extends Controller
             "active" => 'posts',
             "kategori" => $kategori,
             "tags" => $tags,
-            "posts" => Post::latest()->filter(request(['search', 'category', 'author']))->paginate(7)->withQueryString()
+            "posts" => Post::latest()->filter(request(['search', 'category', 'author']))->paginate(9)->withQueryString()
         ]);
     }
 

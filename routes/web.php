@@ -9,7 +9,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\DashboardPostController;
 use App\Http\Controllers\EbookController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagsController;
+use App\Http\Controllers\UserController;
 use App\Models\Tags;
 
 /*
@@ -68,6 +70,11 @@ Route::get('/dashboard/posts/cekSlug', [DashboardPostController::class, 'cekSlug
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
 Route::resource('/dashboard/ebook', EbookController::class)->except('show')->middleware('auth');
 Route::resource('/dashboard/categories', AdminCategoryController::class)->middleware('admin');
+Route::get('dashboard/profile/{id}', [ProfileController::class, 'index'])->middleware('auth');
+Route::get('updateProfile/{id}', [ProfileController::class, 'show'])->middleware('auth');
+Route::put('/dashboard/update/{id}', [ProfileController::class, 'update'])->middleware('auth');
+Route::put('/dashboard/update2/{id}', [ProfileController::class, 'update2'])->middleware('auth');
+Route::get('/dashboard/users', [UserController::class, 'index'])->middleware('admin');
 
 Route::post('/comment/{id}', [CommentController::class, 'store']);
 Route::get('/comment/{id}', [CommentController::class, 'destroy']);

@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Profile;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,14 +17,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
-
-        User::create([
+        $user1 = User::create([
             'name' => 'Prayoga Erlangga Putra',
             'username' => 'prayogaep',
             'email' => 'prayoga@gmail.com',
             'password' => bcrypt('password'),
             'is_admin' => true
+        ]);
+        $user2 = User::create([
+            'name' => 'Root User',
+            'username' => 'root',
+            'email' => 'root@root.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true
+        ]);
+
+        Profile::create([
+            'nama' => 'Prayoga Erlangga Putra',
+            'description' => 'Programmer|Lecturer|Content Creator',
+            'profesi' => 'Programmer',
+            'contact' => '0',
+            'user_id' => $user1->id,
+            'foto' => 'default.png'
+        ]);
+        Profile::create([
+            'nama' => 'Root',
+            'description' => 'Root',
+            'profesi' => 'Programmer',
+            'contact' => '0',
+            'user_id' => $user2->id,
+            'foto' => 'default.png'
         ]);
         // User::create([
         //     'name' => 'Muksin Alatas',
@@ -31,23 +54,23 @@ class DatabaseSeeder extends Seeder
         //     'password' => bcrypt('12345')
         // ]);
 
-        User::factory(3)->create();
-        Category::create([
-            'name' => 'Web Programming',
-            'slug' => 'web-programming'
-        ]);
-        
-        Category::create([
-            'name' => 'Web Design',
-            'slug' => 'web-design'
-        ]);
+        // User::factory(3)->create();
+        // Category::create([
+        //     'name' => 'Web Programming',
+        //     'slug' => 'web-programming'
+        // ]);
 
-        Category::create([
-            'name' => 'Personal',
-            'slug' => 'personal'
-        ]);
+        // Category::create([
+        //     'name' => 'Web Design',
+        //     'slug' => 'web-design'
+        // ]);
 
-        Post::factory(20)->create();
+        // Category::create([
+        //     'name' => 'Personal',
+        //     'slug' => 'personal'
+        // ]);
+
+        // Post::factory(20)->create();
         // Post::create([
         //     'title' => 'Judul Pertama',
         //     'slug' => 'judul-pertama',
@@ -80,6 +103,6 @@ class DatabaseSeeder extends Seeder
         //     'category_id' => 2,
         //     'user_id' => 2
         // ]);
-        
+
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Profile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RegisterController extends Controller
 {
@@ -27,10 +29,22 @@ class RegisterController extends Controller
 
         // $validatedData['password'] = bcrypt($validatedData['password']);
         $validatedData['password'] = Hash::make($validatedData['password']);
-        $validatedData['is_admin'] = false;
-        User::create($validatedData);
+        if ($request->role == 'tidak') {
+            $validatedData['is_admin'] = false;
+        } else {
+            $validatedData['is_admin'] = true;
+        }
+
+        $user = User::create($validatedData);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'nama' => $validatedData['name'],
+            'foto' => 'default.png'
+        ]);
 
         // $request->session()->flash('success', 'Registration successfull! please login!');
-        return redirect('/login')->with('success', 'Registration successfull! please login!');
+        Alert::success('Berhasil', 'User Berhasil ditambahkan');
+        return redirect('/dashboard/users');
     }
 }

@@ -19,6 +19,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Category Name</th>
+                    <th scope="col">Picture</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -28,16 +29,26 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $category->name }}</td>
                         <td>
+                            @if ($category->file_upload != null)
+                                <img src="{{ asset('categories/' . $category->file_upload) }}" width="100px" alt=""
+                                    srcset="">
+                            @else
+                                Belum upload gambar
+                            @endif
+                        </td>
+                        <td>
                             <a href="/dashboard/categories/{{ $category->slug }}/edit" class="badge bg-warning"><span
                                     data-feather="edit"></span></a>
-                            <form action="/dashboard/categories/{{ $category->slug }}" method="post" class="d-inline"
-                                id="delete_category{{ $category->id }}">
-                                @method('delete')
-                                @csrf
-                                <button type="button" class="badge bg-danger border-0"
-                                    onclick="confirm_delete({{ $category->id }})"><span
-                                        data-feather="x-circle"></span></button>
-                            </form>
+                            @if ($category->posts->count() < 1)
+                                <form action="/dashboard/categories/{{ $category->slug }}" method="post" class="d-inline"
+                                    id="delete_category{{ $category->id }}">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="button" class="badge bg-danger border-0"
+                                        onclick="confirm_delete({{ $category->id }})"><span
+                                            data-feather="x-circle"></span></button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -59,5 +70,4 @@
             })
         }
     </script>
-
 @endsection

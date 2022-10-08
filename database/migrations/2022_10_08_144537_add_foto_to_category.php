@@ -14,7 +14,7 @@ class AddFotoToCategory extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            //
+            $table->text('file_upload')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddFotoToCategory extends Migration
     public function down()
     {
         Schema::table('categories', function (Blueprint $table) {
-            //
+            $table->dropColumn('file_upload');
         });
     }
 }

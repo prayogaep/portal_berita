@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminCategoryController extends Controller
 {
@@ -15,7 +16,7 @@ class AdminCategoryController extends Controller
     public function index()
     {
         return view('dashboard.categories.index', [
-            'categories' => Category::all()
+            'categories' => Category::with('posts')->get()
         ]);
     }
 
@@ -41,10 +42,16 @@ class AdminCategoryController extends Controller
             'name' => 'required',
             'slug' => 'required|unique:categories'
         ]);
-
+        if ($request->file('file_upload')) {
+            $file = $request->file('file_upload');
+            $fileName = $file->getClientOriginalName();
+            $destinationPath = public_path() . '/categories';
+            $file->move($destinationPath, $fileName);
+            $validatedData['file_upload'] = $fileName;
+        }
         Category::create($validatedData);
-
-        return redirect('/dashboard/categories')->with('succes', 'Category has been added');
+        Alert::success('Success', 'Category has been added!');
+        return redirect('/dashboard/categories');
     }
 
     /**
@@ -80,20 +87,40 @@ class AdminCategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $rules = $request->validate([
-            'name' => 'required|max:255'
-        ]);
 
-        if($request->slug != $category->slug){
+        $category = Category::where('id',$category->id)->first();
+
+        $rules = [
+            'name' => 'required|max:255'
+        ];
+
+        if ($request->slug != $category->slug) {
             $rules['slug'] = 'required|unique:categories';
         }
-
+        if ($request->file('file_upload')) {
+            $rules['file_upload'] = 'required|mimes:jpg,png,jpeg';
+        }
         $validatedData = $request->validate($rules);
-        
-        Category::where('id', $category->id)
-        ->update($validatedData);
-
-        return redirect('/dashboard/categories')->with('success', 'Category has been updated!');
+        // dd($category);
+        if ($request->file('file_upload')) {
+            if ($category->file_upload != null) {
+                unlink(public_path("categories/" . $category->file_upload));
+            }
+            $file = $request->file('file_upload');
+            $fileName = $file->getClientOriginalName();
+            $fileName = str_replace(' ', '_', $fileName);
+            $destinationPath = public_path() . '/categories';
+            $file->move($destinationPath, $fileName);
+            $validatedData['file_upload'] = $fileName;
+            $category->file_upload = $validatedData['file_upload'];
+        }
+        $category->name = $validatedData['name'];
+        if ($request->slug != $category->slug) {
+            $category->slug = $validatedData['slug'];
+        }
+        $category->update();
+        Alert::success('Success', 'Category has been updated!');
+        return redirect('/dashboard/categories');
     }
 
     /**
@@ -104,6 +131,9 @@ class AdminCategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if ($category->file_upload != null) {
+            unlink(public_path("categories/" . $category->file_upload));
+        }
         Category::destroy($category->id);
         return redirect('/dashboard/categories')->with('success', 'Category has been deleted!');
     }

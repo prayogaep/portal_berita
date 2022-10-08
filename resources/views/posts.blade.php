@@ -165,11 +165,13 @@
                         transition-all duration-200 delay-100">
 
 
-                            {{-- <div class="rounded-xl bg-blue-100 px-3 py-2 md:py-4">
-                                <i
-                                    class="mdi mdi-home-outline mx-auto
-                                text-indigo-900 text-2xl md:text-3xl"></i>
-                            </div> --}}
+                            <div class="rounded md:py-4">
+                                @if ($k->file_upload != null)
+                                    <img src="{{ asset('categories/'.$k->file_upload) }}" width="75px"  alt="{{ $k->name }}" class="rounded">
+                                @else
+                                    <img src="{{ asset('img/1.png') }}" width="75px" alt="default" class="rounded">
+                                @endif
+                            </div>
 
 
                             <div class="grow flex flex-col pl-5 pt-2">
