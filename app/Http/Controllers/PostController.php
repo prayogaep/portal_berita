@@ -49,7 +49,13 @@ class PostController extends Controller
 
     public function ebook()
     {
-        $ebooks = Ebook::paginate(20)->withQueryString();
+        if (request()->search) {
+            $cari = request()->search;
+            $ebooks = Ebook::where('file_upload', 'like', "%$cari%")->paginate(20)->withQueryString();
+        } else {
+            $ebooks = Ebook::paginate(20)->withQueryString();
+        }
+
 
         return view('ebook', [
             "title" => "E-books",

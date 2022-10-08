@@ -39,7 +39,8 @@ class EbookController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'file_upload' => 'required|mimes:pdf'
+            'file_upload' => 'required|mimes:pdf',
+            'description' => 'required'
         ];
         $validatedData = $request->validate($rules);
         $file = $request->file('file_upload');
@@ -48,10 +49,8 @@ class EbookController extends Controller
         $destinationPath = public_path() . '/ebook';
         $file->move($destinationPath, $fileName);
         $validatedData['file_upload'] = $fileName;
-        $save = Ebook::create([
-            'file_upload' => $validatedData['file_upload'],
-            'user_id' => Auth::user()->id
-        ]);
+        $validatedData['user_id'] = Auth::user()->id;
+        $save = Ebook::create($validatedData);
         if ($save == true) {
             Alert::success('Success', 'File has been uploded');
             return redirect('/dashboard/ebook');

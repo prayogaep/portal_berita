@@ -8,7 +8,7 @@
                 class="w-auto bg-white rounded-lg border my-10 border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
                     @if ($posts[0]->image)
-                        <img class="rounded-t-lg w-full lg:h-96 md:h-40 " src="{{ asset('storage/' . $posts[0]->image) }}"
+                        <img class="rounded-t-lg w-full lg:h-96 md:h-40 " src="{{ asset('post-image/' . $posts[0]->image) }}"
                             alt="{{ $posts[0]->category->name }}">
                     @else
                         <img class="rounded-t-lg w-full lg:h-96 md:h-40 " src="{{ asset('img/1.png') }}"

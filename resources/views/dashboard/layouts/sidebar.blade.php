@@ -16,7 +16,7 @@
         <li class="nav-item">
           <a class="nav-link {{ Request::is('dashboard/ebook*') ? 'active' : '' }}" href="/dashboard/ebook">
             <span data-feather="book"></span>
-            Upload PDf
+            Upload E-Book
           </a>
         </li>
         <li class="nav-item">

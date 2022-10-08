@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.main')
 @section('container')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">My Ebook</h1>
+        <h1 class="h2">My E-Book</h1>
     </div>
 
     @if (session()->has('success'))
@@ -18,7 +18,7 @@
     <div class="table-responsive col-lg-8">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Upload New Ebook
+            Upload New E-Book
         </button>
 
         <!-- Modal -->
@@ -37,6 +37,10 @@
                                 <input class="form-control" type="file" id="file_upload" name="file_upload">
                                 <small class="text-muted">File Must .pdf</small>
                             </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -50,7 +54,8 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Ebook</th>
+                    <th scope="col">E-book</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -59,6 +64,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $ebook->file_upload }}</td>
+                        <td>{{ $ebook->description }}</td>
                         <td><form action="/dashboard/ebook/{{ $ebook->id }}" method="post" id="delete_post{{ $ebook->id }}">
                         @csrf
                         @method('DELETE')
@@ -66,7 +72,9 @@
                         </form></td>
                     </tr>
                 @empty
-
+                    <tr>
+                        <td colspan="4" class="text-center">No Data Found</td>
+                    </tr>
                 @endforelse
 
             </tbody>

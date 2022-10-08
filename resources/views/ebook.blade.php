@@ -45,7 +45,7 @@
                 </div>
                 <input type="text" id="simple-search"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search" required="">
+                    placeholder="Search" name="search" required="">
             </div>
             <button type="submit"
                 class="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -61,20 +61,40 @@
     </div>
     <div class="container px-8 mx-auto mb-40">
         <div class="border rounded-lg shadow-lg p-10">
-            <div class="grid grid-cols-3 gap-3">
-            @forelse ($ebooks as $ebook)
-                <a href="/downloadEbook/{{ base64_encode($ebook->id) }}"
-                    class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        {{ $ebook->file_upload }}</h5>
-                    <p class="font-normal text-gray-700 dark:text-gray-400">Upload By. {{ $ebook->user->username }} at
-                        {{ $ebook->created_at->diffForHumans() }}</p>
-                </a>
+            @if ($ebooks->count())
+                <div class="px-10 grid md:grid-cols-3  grid-cols-1 gap-3 ">
 
-            @empty
-                <h1 class="text-center text-2xl text-gray-400 mb-10">No data found</h1>
-            @endforelse
-            </div>
+                    @foreach ($ebooks as $ebook)
+                        <a href="/downloadEbook/{{ base64_encode($ebook->id) }}" class="">
+                            <div
+                                class="max-w-sm bg-white rounded-lg border overflow-hidden border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700">
+
+                                <div class="p-10">
+                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                        {{ $ebook->file_upload }}</h5>
+
+                                    <p>
+                                        <small class="text-muted">
+                                            <p class="font-normal text-gray-700 dark:text-gray-400">Upload By.
+                                                {{ $ebook->user->username }}
+                                                at
+                                                {{ $ebook->created_at->diffForHumans() }}</p>
+                                        </small>
+                                    </p>
+                                    <hr>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ $ebook->description }}
+                                    </p>
+
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            @else
+                <h1 class="text-center mx-auto text-2xl text-gray-400 mb-10">No data found</h1>
+            @endif
+
         </div>
+
     </div>
 @endsection
